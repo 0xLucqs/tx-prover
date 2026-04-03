@@ -16,6 +16,7 @@ targets:
     settings:
       base:
         GENERATE_INFOPLIST_FILE: true
+        CODE_SIGN_ENTITLEMENTS: TxProver/TxProver.entitlements
         SWIFT_OBJC_BRIDGING_HEADER: TxProver/TxProver-Bridging-Header.h
         OTHER_LDFLAGS:
           - "-lresolv"
