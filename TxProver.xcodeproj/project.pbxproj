@@ -31,7 +31,6 @@
 		00B80A5E6C646C527C3404BF /* TxProver.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TxProver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03E503CE21DE1B9B5682B17D /* TxProverFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TxProverFFI.xcframework; path = rust/TxProverFFI.xcframework; sourceTree = "<group>"; };
 		0FF56CCA72BECA56A278ED41 /* TxProver-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TxProver-Bridging-Header.h"; sourceTree = "<group>"; };
-		553B460CA54D9627D74ABE74 /* TxProver.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TxProver.entitlements; sourceTree = "<group>"; };
 		75CD03D0376E641768CAF942 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		EEA8E2C0085C6567EDCEC875 /* TxProverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxProverApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -61,7 +60,6 @@
 			children = (
 				75CD03D0376E641768CAF942 /* ContentView.swift */,
 				0FF56CCA72BECA56A278ED41 /* TxProver-Bridging-Header.h */,
-				553B460CA54D9627D74ABE74 /* TxProver.entitlements */,
 				EEA8E2C0085C6567EDCEC875 /* TxProverApp.swift */,
 			);
 			path = TxProver;
@@ -239,7 +237,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = TxProver/TxProver.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -328,7 +325,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = TxProver/TxProver.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
