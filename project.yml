@@ -11,14 +11,13 @@ targets:
     platform: iOS
     sources:
       - TxProver
+    dependencies:
+      - framework: rust/TxProverFFI.xcframework
     settings:
       base:
         GENERATE_INFOPLIST_FILE: true
         SWIFT_OBJC_BRIDGING_HEADER: TxProver/TxProver-Bridging-Header.h
-        LIBRARY_SEARCH_PATHS:
-          - "$(PROJECT_DIR)/rust"
         OTHER_LDFLAGS:
-          - "-ltx_prover_ffi"
           - "-lresolv"
           - "-framework Security"
           - "-framework SystemConfiguration"
@@ -35,7 +34,7 @@ targets:
     preBuildScripts:
       - name: Build Rust FFI Library
         script: |
-          if [ ! -f "${PROJECT_DIR}/rust/libtx_prover_ffi.a" ]; then
-            echo "warning: libtx_prover_ffi.a not found. Run ./build-rust.sh first."
+          if [ ! -d "${PROJECT_DIR}/rust/TxProverFFI.xcframework" ]; then
+            echo "warning: TxProverFFI.xcframework not found. Run ./build-rust.sh first."
           fi
         basedOnDependencyAnalysis: false

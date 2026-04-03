@@ -9,14 +9,42 @@
 /* Begin PBXBuildFile section */
 		5F2C08C65BFAA03822ED2756 /* TxProverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8E2C0085C6567EDCEC875 /* TxProverApp.swift */; };
 		A35382BD450CF8CAF7C251C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CD03D0376E641768CAF942 /* ContentView.swift */; };
+		A91A5C952210D66EF9A31447 /* TxProverFFI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E503CE21DE1B9B5682B17D /* TxProverFFI.xcframework */; };
+		F37FCF5B9A90B82ABFD9A7CD /* TxProverFFI.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03E503CE21DE1B9B5682B17D /* TxProverFFI.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A93A4C7E31556B2F3303A038 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F37FCF5B9A90B82ABFD9A7CD /* TxProverFFI.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00B80A5E6C646C527C3404BF /* TxProver.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TxProver.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		03E503CE21DE1B9B5682B17D /* TxProverFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TxProverFFI.xcframework; path = rust/TxProverFFI.xcframework; sourceTree = "<group>"; };
 		0FF56CCA72BECA56A278ED41 /* TxProver-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TxProver-Bridging-Header.h"; sourceTree = "<group>"; };
 		75CD03D0376E641768CAF942 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		EEA8E2C0085C6567EDCEC875 /* TxProverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxProverApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0EFBCFABCF1B1855CDE995FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A91A5C952210D66EF9A31447 /* TxProverFFI.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		10E3B809166CE4CF21DED3C4 /* Products */ = {
@@ -41,8 +69,17 @@
 			isa = PBXGroup;
 			children = (
 				299438A8F40056765FC6E482 /* TxProver */,
+				EE365410D975BCE9898DDA3A /* Frameworks */,
 				10E3B809166CE4CF21DED3C4 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		EE365410D975BCE9898DDA3A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				03E503CE21DE1B9B5682B17D /* TxProverFFI.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -54,6 +91,8 @@
 			buildPhases = (
 				9517D6F5723987C81008DAB8 /* Build Rust FFI Library */,
 				7B25DBA48F27D5B8D19C0803 /* Sources */,
+				0EFBCFABCF1B1855CDE995FA /* Frameworks */,
+				A93A4C7E31556B2F3303A038 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -114,7 +153,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ ! -f \"${PROJECT_DIR}/rust/libtx_prover_ffi.a\" ]; then\n  echo \"warning: libtx_prover_ffi.a not found. Run ./build-rust.sh first.\"\nfi\n";
+			shellScript = "if [ ! -d \"${PROJECT_DIR}/rust/TxProverFFI.xcframework\" ]; then\n  echo \"warning: TxProverFFI.xcframework not found. Run ./build-rust.sh first.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -199,6 +238,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"rust\"",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -209,11 +252,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/rust",
-				);
 				OTHER_LDFLAGS = (
-					"-ltx_prover_ffi",
 					"-lresolv",
 					"-framework Security",
 					"-framework SystemConfiguration",
@@ -287,6 +326,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"rust\"",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -297,11 +340,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/rust",
-				);
 				OTHER_LDFLAGS = (
-					"-ltx_prover_ffi",
 					"-lresolv",
 					"-framework Security",
 					"-framework SystemConfiguration",
