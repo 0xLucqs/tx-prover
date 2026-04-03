@@ -1,0 +1,41 @@
+name: TxProver
+options:
+  bundleIdPrefix: com.txprover
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "16.0"
+
+targets:
+  TxProver:
+    type: application
+    platform: iOS
+    sources:
+      - TxProver
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: true
+        SWIFT_OBJC_BRIDGING_HEADER: TxProver/TxProver-Bridging-Header.h
+        LIBRARY_SEARCH_PATHS:
+          - "$(PROJECT_DIR)/rust"
+        OTHER_LDFLAGS:
+          - "-ltx_prover_ffi"
+          - "-lresolv"
+          - "-framework Security"
+          - "-framework SystemConfiguration"
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: true
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+      configs:
+        Debug:
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+        Release:
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+    preBuildScripts:
+      - name: Build Rust FFI Library
+        script: |
+          if [ ! -f "${PROJECT_DIR}/rust/libtx_prover_ffi.a" ]; then
+            echo "warning: libtx_prover_ffi.a not found. Run ./build-rust.sh first."
+          fi
+        basedOnDependencyAnalysis: false
