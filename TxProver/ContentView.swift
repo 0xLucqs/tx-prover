@@ -16,6 +16,22 @@ struct ContentView: View {
     @State private var isRunning = false
     @State private var exitCode: Int32?
     @State private var copied = false
+    @State private var startTime: Date?
+    @State private var elapsed: TimeInterval = 0
+    @State private var finalElapsed: TimeInterval?
+
+    private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+
+    private func formatElapsed(_ t: TimeInterval) -> String {
+        let minutes = Int(t) / 60
+        let seconds = Int(t) % 60
+        let tenths = Int((t - floor(t)) * 10)
+        if minutes > 0 {
+            return String(format: "%dm %02d.%ds", minutes, seconds, tenths)
+        } else {
+            return String(format: "%d.%ds", seconds, tenths)
+        }
+    }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -31,6 +47,15 @@ struct ContentView: View {
             .disabled(isRunning)
             .buttonStyle(.borderedProminent)
             .tint(exitCode.map { $0 == 0 ? .green : .red } ?? .blue)
+
+            if isRunning || finalElapsed != nil {
+                HStack(spacing: 6) {
+                    Image(systemName: "clock")
+                    Text(formatElapsed(isRunning ? elapsed : (finalElapsed ?? 0)))
+                        .font(.system(.title3, design: .monospaced))
+                }
+                .foregroundStyle(isRunning ? .blue : .secondary)
+            }
 
             HStack {
                 if let code = exitCode {
@@ -61,6 +86,11 @@ struct ContentView: View {
             }
         }
         .padding()
+        .onReceive(timer) { _ in
+            if let start = startTime, isRunning {
+                elapsed = Date().timeIntervalSince(start)
+            }
+        }
     }
 
     private func saveLogs() {
@@ -77,6 +107,10 @@ struct ContentView: View {
         isRunning = true
         exitCode = nil
         output = ""
+        finalElapsed = nil
+        elapsed = 0
+        let start = Date()
+        startTime = start
 
         DispatchQueue.global(qos: .userInitiated).async {
             globalLogHandler = { msg in
@@ -89,8 +123,10 @@ struct ContentView: View {
 
             globalLogHandler = nil
 
+            let total = Date().timeIntervalSince(start)
             DispatchQueue.main.async {
                 exitCode = code
+                finalElapsed = total
                 isRunning = false
             }
         }
