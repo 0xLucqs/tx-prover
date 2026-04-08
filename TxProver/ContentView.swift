@@ -12,7 +12,7 @@ private func logCallbackC(message: UnsafePointer<CChar>?) {
 }
 
 // Max lines to keep in memory / display. Caps SwiftUI Text layer height and memory use.
-private let maxDisplayLines = 1500
+private let maxDisplayLines = 500
 
 struct ContentView: View {
     @State private var lines: [String] = []
