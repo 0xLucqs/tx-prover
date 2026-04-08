@@ -11,14 +11,19 @@ private func logCallbackC(message: UnsafePointer<CChar>?) {
     globalLogHandler?(str)
 }
 
+// Max lines to keep in memory / display. Caps SwiftUI Text layer height and memory use.
+private let maxDisplayLines = 1500
+
 struct ContentView: View {
-    @State private var output = ""
+    @State private var lines: [String] = []
     @State private var isRunning = false
     @State private var exitCode: Int32?
     @State private var copied = false
     @State private var startTime: Date?
     @State private var elapsed: TimeInterval = 0
     @State private var finalElapsed: TimeInterval?
+
+    private var output: String { lines.joined(separator: "\n") }
 
     private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
@@ -64,7 +69,10 @@ struct ContentView: View {
                         .foregroundStyle(code == 0 ? .green : .red)
                 }
                 Spacer()
-                if !output.isEmpty {
+                if !lines.isEmpty {
+                    Text("\(lines.count) lines")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     Button(copied ? "Saved!" : "Save Logs") {
                         saveLogs()
                     }
@@ -80,7 +88,7 @@ struct ContentView: View {
                         .textSelection(.enabled)
                         .id("bottom")
                 }
-                .onChange(of: output) { _, _ in
+                .onChange(of: lines.count) { _, _ in
                     proxy.scrollTo("bottom", anchor: .bottom)
                 }
             }
@@ -106,7 +114,7 @@ struct ContentView: View {
     private func runProver() {
         isRunning = true
         exitCode = nil
-        output = ""
+        lines = []
         finalElapsed = nil
         elapsed = 0
         let start = Date()
@@ -115,7 +123,11 @@ struct ContentView: View {
         DispatchQueue.global(qos: .userInitiated).async {
             globalLogHandler = { msg in
                 DispatchQueue.main.async {
-                    output += msg + "\n"
+                    lines.append(msg)
+                    // Cap the buffer to avoid unbounded SwiftUI Text growth.
+                    if lines.count > maxDisplayLines {
+                        lines.removeFirst(lines.count - maxDisplayLines)
+                    }
                 }
             }
 
