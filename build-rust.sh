@@ -33,6 +33,7 @@ for TARGET in "${TARGETS[@]}"; do
   rustup run "${TOOLCHAIN}" cargo build \
     --manifest-path "${SEQUENCER_DIR}/Cargo.toml" \
     -p tx_prover_ffi \
+    --lib \
     --target "${TARGET}" \
     --release
 done
